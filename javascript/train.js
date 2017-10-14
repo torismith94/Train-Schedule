@@ -35,7 +35,7 @@ var config = {
   console.log(trainTime.trainTime);
   console.log(frequency.frequency);
 
-  alert("train added!");
+  alert("Your train has been added to the schedule! Be sure to check the schedule so you don't miss it!");
 
 $("#train-name-input").val("");
 $("#destination-input").val("");
