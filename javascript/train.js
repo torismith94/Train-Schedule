@@ -20,6 +20,7 @@ var config = {
   	var frequency = $("#frequency-input").val().trim();
 
 
+
 	var newTrain = {
 		train: trainName,
   		destination: destination,
@@ -41,3 +42,41 @@ $("#destination-input").val("");
 $("#train-time-input").val("");
 $("#frequency-input").val("");
 });
+
+ //event for when a user adds a train and then adds it to a row in the schedule
+ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
+ 	console.log(childSnapshot.val());
+
+ 	var trainName = childSnapshot.val().train;
+ 	var destination = childSnapshot.val().destination;
+ 	var trainTime = childSnapshot.val().trainTime;
+ 	var frequency = childSnapshot.val().frequency;
+
+ 	console.log(trainName);
+  	console.log(destination);
+  	console.log(trainTime);
+  	console.log(frequency);
+  
+
+  	var trainTimeConverted = moment(trainTime, "hh:mm").subtract(1, "years");
+  	console.log(trainTimeConverted);
+
+  	var currentTime = moment();
+  	console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
+
+  	var diffTime = moment().diff(moment(trainTimeConverted), "minutes");
+  	console.log("DIFFERENCE IN TIME: " + diffTime);
+
+  	var timeApart = diffTime % frequency;
+  	console.log(timeApart);
+
+  	var minutes = frequency - timeApart;
+  	console.log("MINUTES UNTIL TRAIN: " + minutes);
+
+  	var nextArrival = moment().add(minutes, "minutes").format("hh:mm");
+  	console.log("Arrival Time: " + moment(nextArrival).format("hh:mm"));
+
+$("#train-table > tbody").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" +
+  frequency + "</td><td>" + nextArrival + "</td><td>" + minutes + "</td></tr>");
+});
+
