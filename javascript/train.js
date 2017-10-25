@@ -53,12 +53,28 @@ $("#frequency-input").val("");
  	var frequency = childSnapshot.val().frequency;
 
  	console.log(trainName);
-  	console.log(destination);
-  	console.log(trainTime);
-  	console.log(frequency);
-  
+  console.log(destination);
+  console.log(trainTime);
+  console.log(frequency);
 
-  	var trainTimeConverted = moment(trainTime, "hh:mm").subtract(1, "years");
+  var row = $('<tr>')
+  row.append($('<td>').text(trainName))
+  row.append($('<td>').text(destination))
+  row.append($('<td>').text(frequency))
+
+  var next$ = $('<td>')
+  var away$ = $('<td>')
+
+  row.append(next$)
+  row.append(away$)
+
+  $("#train-table > tbody").append(row)
+
+  update()
+  setInterval(update, 1000)
+
+  function update () {
+    var trainTimeConverted = moment(trainTime, "hh:mm").subtract(1, "years");
   	console.log(trainTimeConverted);
 
   	var currentTime = moment();
@@ -74,9 +90,10 @@ $("#frequency-input").val("");
   	console.log("MINUTES UNTIL TRAIN: " + minutes);
 
   	var nextArrival = moment().add(minutes, "minutes").format("hh:mm");
-  	console.log("Arrival Time: " + moment(nextArrival).format("hh:mm"));
+    console.log("Arrival Time: " + moment(nextArrival).format("hh:mm"));
 
-$("#train-table > tbody").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" +
-  frequency + "</td><td>" + nextArrival + "</td><td>" + minutes + "</td></tr>");
+    next$.text(nextArrival)
+    away$.text(minutes)
+  }
 });
 
